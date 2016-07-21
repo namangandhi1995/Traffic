@@ -1,0 +1,218 @@
+<html>
+  <head>
+  <link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css">
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+	 <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+	  <link href="css/custom.min.css" rel="stylesheet">
+
+
+    <script >
+      google.charts.load('current', {'packages':['corechart', 'controls']});
+      google.charts.setOnLoadCallback(drawChart);
+
+    function drawChart() {
+      //var queryString = encodeURIComponent('SELECT B,C,D,E,F where C="Ahmedabad" and D="air conditioner"');
+      var queryString = encodeURIComponent('SELECT C,E,F,M, O, Q, T, U, V OFFSET 2');
+
+      var query = new google.visualization.Query(
+          'https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=' + queryString);
+      query.send(handleQueryResponse);
+      }
+
+      function handleQueryResponse(response) {
+      if (response.isError()) {
+        alert('Error in query: ' + response.getMessage() + ' ' + response.getDetailedMessage());
+        return;
+      }
+
+      var data = response.getDataTable();
+
+      var dashboard = new google.visualization.Dashboard(document.getElementById('dashboard_div'));
+
+      var cityFilter = new google.visualization.ControlWrapper({
+          'controlType': 'CategoryFilter',
+          'containerId': 'filter_div',
+          'options': {
+            'filterColumnLabel': 'Region',
+            'values': ["Overall","Ahmedabad", "Bengaluru", "Chennai", "Delhi", "Noida", "Gurgaon", "Mumbai", "Hyderabad", "Jaipur", "Rest of India"],
+            'ui':{
+              'allowMultiple': false,
+              'allowTyping': false,
+              'allowNone': false
+            },
+            'state': {'selectedValues':['Ahmedabad']}
+
+          }
+        });
+
+      var categoryFilter = new google.visualization.ControlWrapper({
+          'controlType': 'CategoryFilter',
+          'containerId': 'filter_div1',
+          'options': {
+            'filterColumnLabel': 'Product Category',
+            'values': ["Overall",  "air conditioner", "air cooler",  "android phones",  "audio speaker", "fans",  "gas stove",
+                        "headphone & headset", "home theatres", "iphone",  "iron",  "led tv",  "microwave oven" , "mixer, juicer, grinder",
+                          "pendrive", "power bank",  "pressure cooker", "refrigerator",  "trimmer", "washing machine", "water purifier"],
+
+            'ui':{
+              'allowMultiple': false,
+              'allowTyping': false,
+              'allowNone': false
+            },
+            'state': {'selectedValues':['air conditioner']}
+          }
+        });
+
+      //cityFilter.draw()
+      //categoryFilter.draw()
+
+     var wrapper = new google.visualization.ChartWrapper();
+     wrapper.setChartType('LineChart');
+     wrapper.setContainerId('chart_div');
+
+     var currCity="Ahmedabad";
+     var currCategory="air conditioner";
+     wrapper.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     wrapper.setQuery('SELECT C,E,F,M,O where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
+     wrapper.setView({'columns':[0,3,4]});
+     wrapper.setOptions({'title':'Product Views'});
+     wrapper.draw();
+
+     var gmv = new google.visualization.ChartWrapper();
+     gmv.setChartType('LineChart');
+     gmv.setContainerId('gmv_div');
+
+     gmv.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     gmv.setQuery('SELECT C,E,F,T  where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
+     gmv.setView({'columns':[0,3]});
+     gmv.setOptions({'title':'GMV'});
+     gmv.draw();
+
+     var prices = new google.visualization.ChartWrapper();
+     prices.setChartType('LineChart');
+     prices.setContainerId('prices_div');
+
+     prices.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     prices.setQuery('SELECT C,E,F,U,V  where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
+     prices.setView({'columns':[0,3, 4]});
+     prices.setOptions({'title':'Prices and SKUs'});
+     prices.draw();
+
+
+    google.visualization.events.addListener(cityFilter, 'statechange', setChartView);
+    google.visualization.events.addListener(categoryFilter, 'statechange', setChartView);
+
+    function setChartView () {
+        var state = cityFilter.getState();
+        var cat_state = categoryFilter.getState();
+
+        var currCity =  state.selectedValues[0];
+        var currCategory = cat_state.selectedValues[0];
+
+        wrapper.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+        wrapper.setQuery('SELECT C,E,F,M,O where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
+        wrapper.setView({'columns':[0,3, 4]});
+        wrapper.draw();
+
+
+     gmv.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     gmv.setQuery('SELECT C,E,F,T  where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
+     gmv.setView({'columns':[0,3]});
+     gmv.setOptions({'title':'GMV'});
+     gmv.draw();
+
+
+
+     prices.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     prices.setQuery('SELECT C,E,F,U,V  where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
+     prices.setView({'columns':[0,3, 4]});
+     prices.setOptions({'title':'Prices and SKUs'});
+     prices.draw();
+
+
+    }
+
+     dashboard.bind([cityFilter, categoryFilter ], wrapper);
+
+     dashboard.draw(data);
+
+
+
+}
+    </script>
+  </head>
+  <body >
+
+   <!--Div that will hold the dashboard-->
+   <div class="jumbotron "style="height:100px;" >
+   <div class="row" >
+   <div   class="col-sm-1"style="margin-top: -45px;">
+   <img style="height: 50px;   margin-top: 24px;
+    margin-left: 23px;" src="img/zop.png"/>
+
+ </div>
+  <div  class="col-sm-5 " style="    margin-top: -29px;">
+  <span style="font-size:40;">Kibana Traffic</span></div>
+   <div class="col-sm-3 "    id="filter_div" >
+        </div>
+
+    <div class="col-sm-3" id="filter_div1"></div>
+  </div>
+   <!-- <div class = "dropdown style="  margin-top:50px;width:200px;" id="filter_div"></div> -->
+      <!-- <div  class = "dropdown style=" float:right; margin-right:150px;width:300px;" id="filter_div1"></div> -->
+ </div>
+  <div class="container body">
+    <div id="dashboard_div">
+      <!--Divs that will hold each control and chart-->
+
+	  <div class="row"  style=" margin-left:1; margin-right:1;">
+        <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Product Views <small>Sessions</small></h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div id="chart_div" style="height:300px;" class="x_content">
+                    <canvas id="chart_div"></canvas>
+                  </div>
+                </div>
+        </div>
+		<div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>GMV <small>Sessions</small></h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div  id="gmv_div" style="height:300px;" class="x_content">
+                    <canvas ></canvas>
+                  </div>
+                </div>
+        </div>
+
+      </div>
+
+	  <div class="row" style=" margin-left:1; margin-right:1;">
+      <div class="col-md-6 col-sm-6 col-xs-12">
+                <div class="x_panel">
+                  <div class="x_title">
+                    <h2>Prices and SKUs<small>Sessions</small></h2>
+                    <div class="clearfix"></div>
+                  </div>
+                  <div  id="prices_div" style="height:300px;" class="x_content">
+                    <canvas ></canvas>
+                  </div>
+                </div>
+        </div>
+
+      <div id="skus_div"></div>
+	  </div>
+
+    </div>
+  </div>
+      <!-- <div id="chart_div"   style="padding-left:10px; height: 400px; width:800px; margin-top:100px;" ></div> -->
+
+
+
+
+  </body>
+</html>
