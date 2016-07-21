@@ -15,7 +15,7 @@
       var queryString = encodeURIComponent('SELECT C,E,F,M, O, Q, T, U, V OFFSET 2');
 
       var query = new google.visualization.Query(
-          'https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=' + queryString);
+          'https://docs.google.com/spreadsheets/d/key/gviz/tq?gid=750659874&headers=2&tq=' + queryString);
       query.send(handleQueryResponse);
       }
 
@@ -72,7 +72,7 @@
 
      var currCity="Ahmedabad";
      var currCategory="air conditioner";
-     wrapper.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     wrapper.setDataSourceUrl('https://docs.google.com/spreadsheets/d/key/gviz/tq?gid=750659874&headers=2&tq=');
      wrapper.setQuery('SELECT C,E,F,M,O where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
      wrapper.setView({'columns':[0,3,4]});
      wrapper.setOptions({'title':'Product Views'});
@@ -82,7 +82,7 @@
      gmv.setChartType('LineChart');
      gmv.setContainerId('gmv_div');
 
-     gmv.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     gmv.setDataSourceUrl('https://docs.google.com/spreadsheets/d/key/gviz/tq?gid=750659874&headers=2&tq=');
      gmv.setQuery('SELECT C,E,F,T  where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
      gmv.setView({'columns':[0,3]});
      gmv.setOptions({'title':'GMV'});
@@ -92,7 +92,7 @@
      prices.setChartType('LineChart');
      prices.setContainerId('prices_div');
 
-     prices.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     prices.setDataSourceUrl('https://docs.google.com/spreadsheets/d/key/gviz/tq?gid=750659874&headers=2&tq=');
      prices.setQuery('SELECT C,E,F,U,V  where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
      prices.setView({'columns':[0,3, 4]});
      prices.setOptions({'title':'Prices and SKUs'});
@@ -109,13 +109,13 @@
         var currCity =  state.selectedValues[0];
         var currCategory = cat_state.selectedValues[0];
 
-        wrapper.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+        wrapper.setDataSourceUrl('https://docs.google.com/spreadsheets/d/key/gviz/tq?gid=750659874&headers=2&tq=');
         wrapper.setQuery('SELECT C,E,F,M,O where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
         wrapper.setView({'columns':[0,3, 4]});
         wrapper.draw();
 
 
-     gmv.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     gmv.setDataSourceUrl('https://docs.google.com/spreadsheets/d/key/gviz/tq?gid=750659874&headers=2&tq=');
      gmv.setQuery('SELECT C,E,F,T  where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
      gmv.setView({'columns':[0,3]});
      gmv.setOptions({'title':'GMV'});
@@ -123,7 +123,7 @@
 
 
 
-     prices.setDataSourceUrl('https://docs.google.com/spreadsheets/d/1ju2JfuHmssBrfq4eUlF10kbBbKYTuvfrtoUtkdpTEzY/gviz/tq?gid=750659874&headers=2&tq=');
+     prices.setDataSourceUrl('https://docs.google.com/spreadsheets/d/key/gviz/tq?gid=750659874&headers=2&tq=');
      prices.setQuery('SELECT C,E,F,U,V  where E="'+currCity+'" and F="'+currCategory+'" OFFSET 2');
      prices.setView({'columns':[0,3, 4]});
      prices.setOptions({'title':'Prices and SKUs'});
